@@ -1,23 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import TemChart from './container/TemChart/TemChart';
+import { useState, useEffect } from 'react'
+import Axios from 'axios'
 
 function App() {
+  const [temData, setTemData] = useState(null)
+  useEffect(()=> {
+    if(temData == null) {
+      Axios.get("https://temtem-api.mael.tech/api/temtems?fields=name,tvYields,portraitWikiUrl,wikiPortraitUrlLarge,wikiUrl").then(response => {
+        setTemData(response.data)
+      })
+    }
+  })
+
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {/* Logo goes here whenever we can make that happen */}
+        <h1>TemTracker</h1>
       </header>
+      <div>
+        <TemChart data={temData}/>
+      </div>
     </div>
   );
 }

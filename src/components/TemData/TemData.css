@@ -1,0 +1,15 @@
+.exact {
+    background: rgb(202, 240, 202)
+}
+
+.close {
+    background: rgb(252, 255, 194)
+}
+
+.over {
+    background: rgb(253, 193, 193)
+}
+
+.input-group .input-group-text {
+    width: 65px
+}
