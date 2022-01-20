@@ -2,7 +2,6 @@ import {React, useState, useRef} from 'react';
 import TemData from '../../components/TemData/TemData';
 import TemDropdowns from '../../components/TemDropdowns/TemDropdowns';
 import { Row, Col, Container, ToggleButton, ToggleButtonGroup, Button, Form, FloatingLabel } from 'react-bootstrap'
-import './TemChart.css'
 
 const TemChart = (props) => {
     const [temList, setTemList] = useState([])
@@ -108,7 +107,7 @@ const TemChart = (props) => {
     let multiButtons = ""
     if(temList.length > 0) {
         temData = temList.map((tem, index) => {
-            return <Col key={index}><TemData index={index} tem={tem} ref={refs[index]}/></Col> 
+            return <Col key={index}><TemData index={index} data={props.data} tem={tem} return={(info, index) => setTem(info, index)} delete={(i, n) => deleteTem(i, n)} ref={refs[index]}/></Col> 
         })
         multiButtons = temList.map((tem, index) => {
             const name = tem.name
@@ -116,12 +115,12 @@ const TemChart = (props) => {
         })
     }
   return (
-    <Container scrollable={"true"}>
-        <Row scrollable={"true"}>
-            <Row>
-                <TemDropdowns data={props.data} selected={temList} return={(info, index) => setTem(info, index)} delete={(i, n) => deleteTem(i, n)}/>
+    <Container>
+        <Row>
+            <Row className={"mx-auto pb-3"}>
+                <TemDropdowns data={props.data} selected={temList} return={(info, index) => setTem(info, index)}/>
             </Row>
-            <Row>
+            <Row className={"pb-3"}>
                 {temData}
             </Row>
         </Row>

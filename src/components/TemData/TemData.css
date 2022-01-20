@@ -1,15 +1,24 @@
+.input-group-text {
+    background: white;
+}
+
 .exact {
-    background: rgb(202, 240, 202)
+    background: rgb(73, 107, 73)
 }
 
 .close {
-    background: rgb(252, 255, 194)
+    background: rgb(174, 179, 81)
 }
 
 .over {
-    background: rgb(253, 193, 193)
+    background: rgb(129, 32, 32)
 }
 
 .input-group .input-group-text {
     width: 65px
+}
+
+.spacer {
+    -ms-flex: 0 0 65px;
+    flex: 0 0 65px;
 }

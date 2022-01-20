@@ -1,5 +1,5 @@
 import {React, useImperativeHandle, useState, forwardRef} from 'react';
-import { Container, Row, Col, FormControl, InputGroup } from 'react-bootstrap'
+import { Container, Row, Col, FormControl, InputGroup, Form, Button } from 'react-bootstrap'
 import './TemData.css'
 
 const TemData = forwardRef((props, ref) => {
@@ -36,19 +36,19 @@ const TemData = forwardRef((props, ref) => {
     }
 
     const inputCheckCurrent = (e, stat) => {
-        const test = e.target.value.match(/[^0-9]/g)
-        if(test && test.length > 0) { stat.setCurrent(stat.current) }
-        else if(e.target.value > 500) {stat.setCurrent(500)}
-        else if(e.target.value < 0) {stat.setCurrent(0)}
-        else {stat.setCurrent(e.target.value)}
+        stat.setCurrent(inputCheck(e.target.value, stat.current))
     }
 
     const inputCheckTarget = (e, stat) => {
-        const test = e.target.value.match(/[^0-9]/g)
-        if(test && test.length > 0) { stat.setTarget(stat.target) }
-        else if(e.target.value > 500) {stat.setTarget(500)}
-        else if(e.target.value < 0) {stat.setTarget(0)}
-        else {stat.setTarget(e.target.value)}
+        stat.setTarget(inputCheck(e.target.value, stat.target))
+    }
+
+    const inputCheck = (update, current) => {
+        const test = update.match(/[^0-9]/g)
+        if(test && test.length>0) {return current}
+        else if(update > 500) {return 500}
+        else if(update < 0) {return 0}
+        else {return update}
     }
 
     useImperativeHandle(ref, () => {
@@ -57,11 +57,29 @@ const TemData = forwardRef((props, ref) => {
         }
     })
 
+    const handleChangedSelected = (e, index) => {
+        let selectedTem = props.data.filter((tem) => {
+            return tem.name === e.target.value
+        })
+        props.return(selectedTem[0], index)
+    }
+
+    const handleDeleteSelected = (index, tem) => {
+        props.delete(index, tem)
+    }
+
     for(const stat in statData) {
         const data = statData[stat]
         if(data.current > data.target) { data.class = "over" } 
         else if (data.current === data.target) { data.class = "exact" } 
         else if (data.current >= data.target - 10) { data.class = "close" }
+    }
+
+    let fullTemList = ""
+    if(props.data) {
+        fullTemList = props.data.map((tem, index) => 
+        <option value={tem.name} key={index}>{tem.name}</option>
+        )
     }
 
     let TVList = ""
@@ -79,9 +97,20 @@ const TemData = forwardRef((props, ref) => {
   return (
     <Container key={props.index} className={props.tem.name}>
         <Row>
-            <Col>&nbsp;</Col>
-            <Col>Current TVs</Col>
-            <Col>Target TVs</Col>
+            <InputGroup>
+                <Form.Control as="select" value={props.tem.name} 
+                    onChange={(e) => handleChangedSelected(e, props.index)}>
+                    {fullTemList}
+                </Form.Control>
+                <Button variant="outline-secondary" onClick={() => handleDeleteSelected(props.index, props.index.name)}>
+                    X
+                </Button>
+            </InputGroup>
+        </Row>
+        <Row className="justify-content-center">
+            <Col className="spacer">&nbsp;</Col>
+            <Col className="d-flex justify-content-center"><small>Current TVs</small></Col>
+            <Col className="d-flex justify-content-center"><small>Target TVs</small></Col>
         </Row>
         {TVList}
     </Container>
