@@ -1,6 +1,6 @@
 import {React, useState, useRef} from 'react';
 import TemData from '../../components/TemData/TemData';
-import TemDropdowns from '../../components/TemDropdowns/TemDropdowns';
+// import TemDropdowns from '../../components/TemDropdowns/TemDropdowns';
 import { Row, Col, Container, ToggleButton, ToggleButtonGroup, Button, Form, FloatingLabel } from 'react-bootstrap'
 
 const TemChart = (props) => {
@@ -24,16 +24,16 @@ const TemChart = (props) => {
         newList[slot] = tem
         setTemList(newList)
     }
-    const deleteTem = (slot, tem) => {
-        let newList = [...temList]
-        newList.splice(slot, 1)
-        setTemList(newList)
-        let newInvolvedList = [...involvedTems]
-        console.log(newInvolvedList)
-        newInvolvedList = newInvolvedList.filter((name) => {return name !== tem})
-        console.log(newInvolvedList)
-        setInvolvedTems(newInvolvedList)
-    }
+    // const deleteTem = (slot, tem) => {
+    //     let newList = [...temList]
+    //     newList.splice(slot, 1)
+    //     setTemList(newList)
+    //     let newInvolvedList = [...involvedTems]
+    //     console.log(newInvolvedList)
+    //     newInvolvedList = newInvolvedList.filter((name) => {return name !== tem})
+    //     console.log(newInvolvedList)
+    //     setInvolvedTems(newInvolvedList)
+    // }
 
     const handleSelectedTemsChange = (val) => {
         console.log(val)
@@ -103,23 +103,28 @@ const TemChart = (props) => {
             <option key={index} value={tem.name}>{tem.name}</option>
         )
     }
+
+    
     let temData = ""
+    temData = refs.map((ref, index) => {
+        return (<Col key={index}>
+            <TemData index={index} data={props.data} return={(info, index) => setTem(info, index)} ref={ref} />
+        </Col>
+        )
+    })
+
     let multiButtons = ""
-    if(temList.length > 0) {
-        temData = temList.map((tem, index) => {
-            return <Col key={index}><TemData index={index} data={props.data} tem={tem} return={(info, index) => setTem(info, index)} delete={(i, n) => deleteTem(i, n)} ref={refs[index]}/></Col> 
-        })
-        multiButtons = temList.map((tem, index) => {
-            const name = tem.name
-            return <ToggleButton key={index} value={name} variant="outline-primary" id={name + index}>{name}</ToggleButton>
-        })
-    }
+    multiButtons = temList.map((tem, index) => {
+        const name = tem.name
+        return <ToggleButton key={index} value={name} variant="outline-primary" id={name + index}>{name}</ToggleButton>
+    })
+
   return (
     <Container>
         <Row>
-            <Row className={"mx-auto pb-3"}>
+            {/* <Row className={"mx-auto pb-3"}>
                 <TemDropdowns data={props.data} selected={temList} return={(info, index) => setTem(info, index)}/>
-            </Row>
+            </Row> */}
             <Row className={"pb-3"}>
                 {temData}
             </Row>

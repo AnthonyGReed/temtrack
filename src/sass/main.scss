@@ -1,7 +1,14 @@
-$primary: #25b999;
+$primary: #d6ab1b;
 $body-bg: #2e0646;
 $body-color: #ffffff;
 $input-bg: #5d3574;
 $input-group-addon-bg: #000000;
+$container-max-widths: (
+    sm: 572px,
+    md: 764px,
+    lg: 984px,
+    xl: 1300px,
+    xxl: 2000px,
+);
 
 @import '../../node_modules/bootstrap/scss/bootstrap'

@@ -3,6 +3,7 @@ import { Container, Row, Col, FormControl, InputGroup, Form, Button } from 'reac
 import './TemData.css'
 
 const TemData = forwardRef((props, ref) => {
+    const [tem, setTem] = useState(0);
     const [hpCurrent, setHpCurrent] = useState(0);
     const [hpTarget, setHpTarget] = useState(0);
     const [staminaCurrent, setStaminaCurrent] = useState(0);
@@ -17,6 +18,8 @@ const TemData = forwardRef((props, ref) => {
     const [specialAttackTarget, setSpecialAttackTarget] = useState(0);
     const [specialDefenseCurrent, setSpecialDefenseCurrent] = useState(0);
     const [specialDefenseTarget, setSpecialDefenseTarget] = useState(0);
+    const [totalCurrent, setTotalCurrent] = useState(0);
+    const [totalTarget, setTotalTarget] = useState(0);
 
     let statData = []
     statData.push({stat: "HP", short: "hp", current: hpCurrent, target: hpTarget, setCurrent: setHpCurrent, setTarget: setHpTarget})
@@ -26,6 +29,7 @@ const TemData = forwardRef((props, ref) => {
     statData.push({stat: "Defense", short: "def", current: defenseCurrent, target: defenseTarget, setCurrent: setDefenseCurrent, setTarget: setDefenseTarget})
     statData.push({stat: "Special Attack", short: "spatk", current: specialAttackCurrent, target: specialAttackTarget, setCurrent: setSpecialAttackCurrent, setTarget: setSpecialAttackTarget})
     statData.push({stat: "SpecialDefense", short: "spdef", current: specialDefenseCurrent, target: specialDefenseTarget, setCurrent: setSpecialDefenseCurrent, setTarget: setSpecialDefenseTarget})
+    statData.push({stat: "Total", short: "total", current: totalCurrent, target: totalTarget, setCurrent: setTotalCurrent, setTarget: setTotalTarget})
     
     const addTVs = (stat, amount) => {
         const data = statData.find(data => data.stat === stat)
@@ -36,18 +40,22 @@ const TemData = forwardRef((props, ref) => {
     }
 
     const inputCheckCurrent = (e, stat) => {
-        stat.setCurrent(inputCheck(e.target.value, stat.current))
+        const value = inputCheck(e.target.value, stat.current, totalCurrent)
+        setTotalCurrent((Number(totalCurrent) - Number(stat.current)) + Number(value))
+        stat.setCurrent(Number(value))
     }
 
     const inputCheckTarget = (e, stat) => {
-        stat.setTarget(inputCheck(e.target.value, stat.target))
+        const value = inputCheck(e.target.value, stat.target, totalTarget)
+        setTotalTarget((totalTarget - stat.target) + value)
+        stat.setTarget(value)
     }
 
-    const inputCheck = (update, current) => {
+    const inputCheck = (update, current, total) => {
         const test = update.match(/[^0-9]/g)
-        if(test && test.length>0) {return current}
-        else if(update > 500) {return 500}
+        if((test && test.length>0) || update > 500) {return current}
         else if(update < 0) {return 0}
+        else if(((Number(total) - Number(current)) + Number(update) )> 1000) {return current}
         else {return update}
     }
 
@@ -61,11 +69,15 @@ const TemData = forwardRef((props, ref) => {
         let selectedTem = props.data.filter((tem) => {
             return tem.name === e.target.value
         })
+        setTem(selectedTem)
         props.return(selectedTem[0], index)
     }
 
     const handleDeleteSelected = (index, tem) => {
-        props.delete(index, tem)
+        for(const data in statData) {
+            statData[data].setCurrent(0)
+            statData[data].setTarget(0)
+        }
     }
 
     for(const stat in statData) {
@@ -88,21 +100,22 @@ const TemData = forwardRef((props, ref) => {
             <Row key={index}>
                 <InputGroup>
                     <InputGroup.Text className={stat.class}>{stat.short}</InputGroup.Text>
-                    <FormControl value={stat.current} onChange={(e) => inputCheckCurrent(e, stat)}/>
-                    <FormControl value={stat.target} onChange={(e) => inputCheckTarget(e, stat)}/>
+                    <FormControl readOnly={stat.stat === "Total"} value={stat.current} onChange={(e) => inputCheckCurrent(e, stat)}/>
+                    <FormControl readOnly={stat.stat === "Total"} value={stat.target} onChange={(e) => inputCheckTarget(e, stat)}/>
                 </InputGroup>
             </Row>
     )})
 
   return (
-    <Container key={props.index} className={props.tem.name}>
+    <Container key={props.index}>
         <Row>
             <InputGroup>
-                <Form.Control as="select" value={props.tem.name} 
+                <Form.Control as="select" value={tem.name} 
                     onChange={(e) => handleChangedSelected(e, props.index)}>
+                    <option readOnly>Select a Tem...</option>
                     {fullTemList}
                 </Form.Control>
-                <Button variant="outline-secondary" onClick={() => handleDeleteSelected(props.index, props.index.name)}>
+                <Button variant="outline-secondary" onClick={() => handleDeleteSelected(props.index, tem.name)}>
                     X
                 </Button>
             </InputGroup>
