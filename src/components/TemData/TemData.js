@@ -6,30 +6,39 @@ const TemData = forwardRef((props, ref) => {
     const [tem, setTem] = useState(0);
     const [hpCurrent, setHpCurrent] = useState(0);
     const [hpTarget, setHpTarget] = useState(0);
+    const [hpRemaining, setHpRemaining] = useState("-");
     const [staminaCurrent, setStaminaCurrent] = useState(0);
     const [staminaTarget, setStaminaTarget] = useState(0);
+    const [staminaRemaining, setStaminaRemaining] = useState("-");
     const [speedCurrent, setSpeedCurrent] = useState(0);
     const [speedTarget, setSpeedTarget] = useState(0);
+    const [speedRemaining, setSpeedRemaining] = useState("-");
     const [attackCurrent, setAttackCurrent] = useState(0);
     const [attackTarget, setAttackTarget] = useState(0);
+    const [attackRemaining, setAttackRemaining] = useState("-");
     const [defenseCurrent, setDefenseCurrent] = useState(0);
     const [defenseTarget, setDefenseTarget] = useState(0);
+    const [defenseRemaining, setDefenseRemaining] = useState("-");
     const [specialAttackCurrent, setSpecialAttackCurrent] = useState(0);
     const [specialAttackTarget, setSpecialAttackTarget] = useState(0);
+    const [specialAttackRemaining, setSpecialAttackRemaining] = useState("-");
     const [specialDefenseCurrent, setSpecialDefenseCurrent] = useState(0);
     const [specialDefenseTarget, setSpecialDefenseTarget] = useState(0);
+    const [specialDefenseRemaining, setSpecialDefenseRemaining] = useState("-");
     const [totalCurrent, setTotalCurrent] = useState(0);
     const [totalTarget, setTotalTarget] = useState(0);
+    const [totalRemaining, setTotalRemaining] = useState("-");
+
 
     let statData = []
-    statData.push({stat: "HP", short: "hp", current: hpCurrent, target: hpTarget, setCurrent: setHpCurrent, setTarget: setHpTarget})
-    statData.push({stat: "Stamina", short: "sta", current: staminaCurrent, target: staminaTarget, setCurrent: setStaminaCurrent, setTarget: setStaminaTarget})
-    statData.push({stat: "Speed", short: "spd", current: speedCurrent, target: speedTarget, setCurrent: setSpeedCurrent, setTarget: setSpeedTarget})
-    statData.push({stat: "Attack", short: "atk", current: attackCurrent, target: attackTarget, setCurrent: setAttackCurrent, setTarget: setAttackTarget})
-    statData.push({stat: "Defense", short: "def", current: defenseCurrent, target: defenseTarget, setCurrent: setDefenseCurrent, setTarget: setDefenseTarget})
-    statData.push({stat: "Special Attack", short: "spatk", current: specialAttackCurrent, target: specialAttackTarget, setCurrent: setSpecialAttackCurrent, setTarget: setSpecialAttackTarget})
-    statData.push({stat: "SpecialDefense", short: "spdef", current: specialDefenseCurrent, target: specialDefenseTarget, setCurrent: setSpecialDefenseCurrent, setTarget: setSpecialDefenseTarget})
-    statData.push({stat: "Total", short: "total", current: totalCurrent, target: totalTarget, setCurrent: setTotalCurrent, setTarget: setTotalTarget})
+    statData.push({stat: "HP", short: "hp", current: hpCurrent, target: hpTarget, remaining: hpRemaining, setCurrent: setHpCurrent, setTarget: setHpTarget, setRemaining: setHpRemaining})
+    statData.push({stat: "Stamina", short: "sta", current: staminaCurrent, target: staminaTarget, remaining: staminaRemaining, setCurrent: setStaminaCurrent, setTarget: setStaminaTarget, setRemaining: setStaminaRemaining})
+    statData.push({stat: "Speed", short: "spd", current: speedCurrent, target: speedTarget, remaining: speedRemaining, setCurrent: setSpeedCurrent, setTarget: setSpeedTarget, setRemaining: setSpeedRemaining})
+    statData.push({stat: "Attack", short: "atk", current: attackCurrent, target: attackTarget, remaining: attackRemaining, setCurrent: setAttackCurrent, setTarget: setAttackTarget, setRemaining: setAttackRemaining})
+    statData.push({stat: "Defense", short: "def", current: defenseCurrent, target: defenseTarget, remaining: defenseRemaining, setCurrent: setDefenseCurrent, setTarget: setDefenseTarget, setRemaining: setDefenseRemaining})
+    statData.push({stat: "Special Attack", short: "spatk", current: specialAttackCurrent, target: specialAttackTarget, remaining: specialAttackRemaining, setCurrent: setSpecialAttackCurrent, setTarget: setSpecialAttackTarget, setRemaining: setSpecialAttackRemaining})
+    statData.push({stat: "SpecialDefense", short: "spdef", current: specialDefenseCurrent, target: specialDefenseTarget, remaining: specialDefenseRemaining, setCurrent: setSpecialDefenseCurrent, setTarget: setSpecialDefenseTarget, setRemaining: setSpecialDefenseRemaining})
+    statData.push({stat: "Total", short: "total", current: totalCurrent, target: totalTarget, remaining: totalRemaining, setCurrent: setTotalCurrent, setTarget: setTotalTarget, setRemaining: setTotalRemaining})
     
     const addTVs = (stat, amount) => {
         const data = statData.find(data => data.stat === stat)
@@ -47,8 +56,8 @@ const TemData = forwardRef((props, ref) => {
 
     const inputCheckTarget = (e, stat) => {
         const value = inputCheck(e.target.value, stat.target, totalTarget)
-        setTotalTarget((totalTarget - stat.target) + value)
-        stat.setTarget(value)
+        setTotalTarget((Number(totalTarget) - Number(stat.target)) + Number(value))
+        stat.setTarget(Number(value))
     }
 
     const inputCheck = (update, current, total) => {
@@ -73,7 +82,7 @@ const TemData = forwardRef((props, ref) => {
         props.return(selectedTem[0], index)
     }
 
-    const handleDeleteSelected = (index, tem) => {
+    const handleDeleteSelected = () => {
         for(const data in statData) {
             statData[data].setCurrent(0)
             statData[data].setTarget(0)
@@ -85,6 +94,21 @@ const TemData = forwardRef((props, ref) => {
         if(data.current > data.target) { data.class = "over" } 
         else if (data.current === data.target) { data.class = "exact" } 
         else if (data.current >= data.target - 10) { data.class = "close" }
+    }
+
+    if(props.defeatedTem !== undefined) {
+        let total = 0
+        for(const stat in statData) {
+            if(statData.short === "total") {
+                statData[stat].setRemaining(total)
+            } else {
+                console.log(props.defeatedTem)
+                const tvYield = props.defeatedTem.tvYields[statData[stat].short]
+                if(tvYield > 0) {
+                    statData[stat].setRemaining((Number(statData[stat].target) - Number(statData[stat].current))/Number(tvYield))
+                }
+            }
+        }
     }
 
     let fullTemList = ""
@@ -102,6 +126,7 @@ const TemData = forwardRef((props, ref) => {
                     <InputGroup.Text className={stat.class}>{stat.short}</InputGroup.Text>
                     <FormControl readOnly={stat.stat === "Total"} value={stat.current} onChange={(e) => inputCheckCurrent(e, stat)}/>
                     <FormControl readOnly={stat.stat === "Total"} value={stat.target} onChange={(e) => inputCheckTarget(e, stat)}/>
+                    <FormControl readOnly value={stat.remaining}/>
                 </InputGroup>
             </Row>
     )})
@@ -115,7 +140,7 @@ const TemData = forwardRef((props, ref) => {
                     <option readOnly>Select a Tem...</option>
                     {fullTemList}
                 </Form.Control>
-                <Button variant="outline-secondary" onClick={() => handleDeleteSelected(props.index, tem.name)}>
+                <Button variant="outline-secondary" onClick={handleDeleteSelected}>
                     X
                 </Button>
             </InputGroup>
@@ -124,6 +149,7 @@ const TemData = forwardRef((props, ref) => {
             <Col className="spacer">&nbsp;</Col>
             <Col className="d-flex justify-content-center"><small>Current TVs</small></Col>
             <Col className="d-flex justify-content-center"><small>Target TVs</small></Col>
+            <Col className="d-flex justify-content-center"><small>Remaining Encounters</small></Col>
         </Row>
         {TVList}
     </Container>

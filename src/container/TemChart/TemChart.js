@@ -104,11 +104,16 @@ const TemChart = (props) => {
         )
     }
 
+    let defeatedTemObject = {}
+    if(defeatedTem !== "") {
+        const defeatedIndex = props.data.map((e) => { return e.name }).indexOf(defeatedTem)
+        defeatedTemObject = props.data[defeatedIndex]
+    }
     
     let temData = ""
     temData = refs.map((ref, index) => {
         return (<Col key={index}>
-            <TemData index={index} data={props.data} return={(info, index) => setTem(info, index)} ref={ref} />
+            <TemData index={index} defeated={defeatedTemObject} data={props.data} return={(info, index) => setTem(info, index)} ref={ref} />
         </Col>
         )
     })
