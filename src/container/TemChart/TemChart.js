@@ -1,6 +1,5 @@
 import {React, useState, useRef} from 'react';
 import TemData from '../../components/TemData/TemData';
-// import TemDropdowns from '../../components/TemDropdowns/TemDropdowns';
 import { Row, Col, Container, ToggleButton, ToggleButtonGroup, Button, Form, FloatingLabel } from 'react-bootstrap'
 
 const TemChart = (props) => {
@@ -24,19 +23,8 @@ const TemChart = (props) => {
         newList[slot] = tem
         setTemList(newList)
     }
-    // const deleteTem = (slot, tem) => {
-    //     let newList = [...temList]
-    //     newList.splice(slot, 1)
-    //     setTemList(newList)
-    //     let newInvolvedList = [...involvedTems]
-    //     console.log(newInvolvedList)
-    //     newInvolvedList = newInvolvedList.filter((name) => {return name !== tem})
-    //     console.log(newInvolvedList)
-    //     setInvolvedTems(newInvolvedList)
-    // }
 
     const handleSelectedTemsChange = (val) => {
-        console.log(val)
         for(const tem in val) {
             let inList = false
             for(const data in temList) {
@@ -104,7 +92,7 @@ const TemChart = (props) => {
         )
     }
 
-    let defeatedTemObject = {}
+    let defeatedTemObject = ""
     if(defeatedTem !== "") {
         const defeatedIndex = props.data.map((e) => { return e.name }).indexOf(defeatedTem)
         defeatedTemObject = props.data[defeatedIndex]

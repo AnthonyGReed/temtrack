@@ -28,6 +28,7 @@ const TemData = forwardRef((props, ref) => {
     const [totalCurrent, setTotalCurrent] = useState(0);
     const [totalTarget, setTotalTarget] = useState(0);
     const [totalRemaining, setTotalRemaining] = useState("-");
+    const [defeated, setDefeated] = useState(props.defeated);
 
 
     let statData = []
@@ -96,20 +97,26 @@ const TemData = forwardRef((props, ref) => {
         else if (data.current >= data.target - 10) { data.class = "close" }
     }
 
-    if(props.defeatedTem !== undefined) {
-        let total = 0
-        for(const stat in statData) {
-            if(statData.short === "total") {
-                statData[stat].setRemaining(total)
-            } else {
-                console.log(props.defeatedTem)
-                const tvYield = props.defeatedTem.tvYields[statData[stat].short]
-                if(tvYield > 0) {
-                    statData[stat].setRemaining((Number(statData[stat].target) - Number(statData[stat].current))/Number(tvYield))
-                }
-            }
-        }
+    if(props.defeated.name !== undefined && props.defeated.name !== defeated.name) {
+        console.log(props.defeated.name + " " + defeated.name)
+        setDefeated(props.defeated)
     }
+
+
+    // let total = 0
+    // for(const stat in statData) {
+    //     if(defeated !== "") {
+    //         if(statData.short === "total") {
+    //             statData[stat].setRemaining(total)
+    //         } else {
+    //             console.log(props.defeated)
+    //             const tvYield = props.defeated.tvYields[statData[stat].short]
+    //             if(tvYield > 0) {
+    //                 statData[stat].setRemaining((Number(statData[stat].target) - Number(statData[stat].current))/Number(tvYield))
+    //             }
+    //         }
+    //     }
+    // }
 
     let fullTemList = ""
     if(props.data) {
@@ -122,11 +129,11 @@ const TemData = forwardRef((props, ref) => {
     TVList = statData.map((stat, index) => {
         return ( 
             <Row key={index}>
-                <InputGroup>
+                <InputGroup className={"text-center"}>
                     <InputGroup.Text className={stat.class}>{stat.short}</InputGroup.Text>
-                    <FormControl readOnly={stat.stat === "Total"} value={stat.current} onChange={(e) => inputCheckCurrent(e, stat)}/>
-                    <FormControl readOnly={stat.stat === "Total"} value={stat.target} onChange={(e) => inputCheckTarget(e, stat)}/>
-                    <FormControl readOnly value={stat.remaining}/>
+                    <FormControl className={"px-0 text-center"} readOnly={stat.stat === "Total"} value={stat.current} onChange={(e) => inputCheckCurrent(e, stat)}/>
+                    <FormControl className={"px-0 text-center"} readOnly={stat.stat === "Total"} value={stat.target} onChange={(e) => inputCheckTarget(e, stat)}/>
+                    <FormControl className={"px-0 text-center"} readOnly value={stat.remaining}/>
                 </InputGroup>
             </Row>
     )})
