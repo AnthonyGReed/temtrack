@@ -53,6 +53,7 @@ const TemData = forwardRef((props, ref) => {
         const value = inputCheck(e.target.value, stat.current, totalCurrent)
         setTotalCurrent((Number(totalCurrent) - Number(stat.current)) + Number(value))
         stat.setCurrent(Number(value))
+
     }
 
     const inputCheckTarget = (e, stat) => {
@@ -79,7 +80,7 @@ const TemData = forwardRef((props, ref) => {
         let selectedTem = props.data.filter((tem) => {
             return tem.name === e.target.value
         })
-        setTem(selectedTem)
+        setTem(selectedTem[0])
         props.return(selectedTem[0], index)
     }
 
@@ -89,34 +90,40 @@ const TemData = forwardRef((props, ref) => {
             statData[data].setTarget(0)
         }
     }
-
-    for(const stat in statData) {
-        const data = statData[stat]
-        if(data.current > data.target) { data.class = "over" } 
-        else if (data.current === data.target) { data.class = "exact" } 
-        else if (data.current >= data.target - 10) { data.class = "close" }
-    }
-
+    
     if(props.defeated.name !== undefined && props.defeated.name !== defeated.name) {
-        console.log(props.defeated.name + " " + defeated.name)
         setDefeated(props.defeated)
     }
 
-
-    // let total = 0
-    // for(const stat in statData) {
-    //     if(defeated !== "") {
-    //         if(statData.short === "total") {
-    //             statData[stat].setRemaining(total)
-    //         } else {
-    //             console.log(props.defeated)
-    //             const tvYield = props.defeated.tvYields[statData[stat].short]
-    //             if(tvYield > 0) {
-    //                 statData[stat].setRemaining((Number(statData[stat].target) - Number(statData[stat].current))/Number(tvYield))
-    //             }
-    //         }
-    //     }
-    // }
+    if(defeated.tvYields !== undefined) {
+        let total = 0
+        for(const stat in statData) {
+            const data = statData[stat]
+            if(data.short === "total") {
+                if(data.remaining !== total) {
+                    data.setRemaining(Number(total))
+                } 
+            } else {
+                const tvYield = defeated.tvYields[data.short]
+                if(tvYield > 0) {
+                    let turnsRemaining = ((Number(data.target) - Number(data.current)) / Number(tvYield))
+                    console.log(props.protiens)
+                    console.log(tem.name)
+                    if(props.protiens === tem.name) {
+                        turnsRemaining = Math.floor(turnsRemaining/2)
+                    }
+                    if(data.remaining !== turnsRemaining) {
+                        data.setRemaining(turnsRemaining)
+                    }
+                    total += turnsRemaining
+                } else {
+                    if(data.remaining !== "-") {
+                        data.setRemaining("-")
+                    }
+                }
+            }
+        }
+    }
 
     let fullTemList = ""
     if(props.data) {
@@ -152,11 +159,11 @@ const TemData = forwardRef((props, ref) => {
                 </Button>
             </InputGroup>
         </Row>
-        <Row className="justify-content-center">
-            <Col className="spacer">&nbsp;</Col>
-            <Col className="d-flex justify-content-center"><small>Current TVs</small></Col>
-            <Col className="d-flex justify-content-center"><small>Target TVs</small></Col>
-            <Col className="d-flex justify-content-center"><small>Remaining Encounters</small></Col>
+        <Row className="justify-content-end pt-2">
+            <Col className="px-0 mx-0">&nbsp;</Col>
+            <Col className="text-center px-0 mx-0"><h6>Current<br/>TVs</h6></Col>
+            <Col className="text-center px-0 mx-0"><h6>Target<br/>TVs</h6></Col>
+            <Col className="text-center px-0 mx-0"><h6>Remaining<br/>Encounters</h6></Col>
         </Row>
         {TVList}
     </Container>
