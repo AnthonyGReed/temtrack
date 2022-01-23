@@ -47,16 +47,11 @@ const TemData = forwardRef((props, ref) => {
         if(newValue > 500) { data.setCurrent(500) }
         else if(newValue < 0) { data.setCurrent(0) }
         else if((Number(amount) + Number(totalCurrent)) > 1000) { 
-            console.log("amount: " + amount)
-            console.log("total current: " + totalCurrent)
-            console.log("newValue: " + newValue)
             const val = Number(newValue) - ((Number(amount) + Number(totalCurrent)) - 1000)
             data.setCurrent(val)
-            calculateCurrentTotal()
         }
         else {
             data.setCurrent(newValue)
-            calculateCurrentTotal()
         }
     }
 
@@ -80,15 +75,15 @@ const TemData = forwardRef((props, ref) => {
         else if(((Number(total) - Number(current)) + Number(update) )> 1000) {return current}
         else {return update}
     }
-    
-    const calculateCurrentTotal = () => {
-        let total = 0
-        for(const stat in statData) {
-            const data = statData[stat]
-            if(data.name !== "Total") {
-               total += Number(data.current)
-            }
+
+    let total = 0
+    for(const stat in statData) {
+        const data = statData[stat]
+        if(data.stat !== "Total") {
+            total += Number(data.current)
         }
+    }
+    if(total !== totalCurrent) {
         setTotalCurrent(total)
     }
 
@@ -129,8 +124,6 @@ const TemData = forwardRef((props, ref) => {
                 const tvYield = defeated.tvYields[data.short]
                 if(tvYield > 0) {
                     let turnsRemaining = ((Number(data.target) - Number(data.current)) / Number(tvYield))
-                    console.log(props.protiens)
-                    console.log(tem.name)
                     if(props.protiens === tem.name) {
                         turnsRemaining = Math.floor(turnsRemaining/2)
                     }
