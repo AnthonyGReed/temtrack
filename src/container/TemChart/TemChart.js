@@ -100,7 +100,7 @@ const TemChart = (props) => {
     
     let temData = ""
     temData = refs.map((ref, index) => {
-        return (<Col key={index}>
+        return (<Col key={index} xs={6} md={4} xl={2} className={"pb-3"} >
             <TemData index={index} defeated={defeatedTemObject} protiens={protiens} data={props.data} return={(info, index) => setTem(info, index)} ref={ref} />
         </Col>
         )
@@ -127,24 +127,32 @@ const TemChart = (props) => {
                         {multiButtons}
                     </ToggleButtonGroup>
                 </Row>
-                <FloatingLabel controlId="floatingselect1" label="Select which tem has protiens">
-                    <Form.Control as="select" value={protiens} aria-label="Protiens" onChange={handleProtiens}>
-                        <option></option>
-                        {selectedTems}
-                    </Form.Control>
-                </FloatingLabel>
-                <FloatingLabel controlId="floatingselect2" label="Select which tem has the eraser">
-                    <Form.Control as="select" value={eraser} aria-label="Eraser" onChange={handleEraser}>
-                        <option></option>
-                        {selectedTems}
-                    </Form.Control>
-                </FloatingLabel>
-                <FloatingLabel controlId="floatingselect3" label="Select which tem has the eraser+">
-                    <Form.Control as="select" value={eraserPlus} aria-label="Eraser Plus" onChange={handleEraserPlus}>
-                        <option></option>
-                        {selectedTems}
-                    </Form.Control>
-                </FloatingLabel>
+                <Row>
+                    <Col xs={12} md={4}  className={"pr-0"}>
+                        <FloatingLabel controlId="floatingselect1" label="Select which tem has protiens">
+                            <Form.Control as="select" value={protiens} aria-label="Protiens" onChange={handleProtiens}>
+                                <option></option>
+                                {selectedTems}
+                            </Form.Control>
+                        </FloatingLabel>
+                    </Col>
+                    <Col xs={12} md={4} className={"px-0"}>
+                        <FloatingLabel controlId="floatingselect2" label="Select which tem has the eraser">
+                            <Form.Control as="select" value={eraser} aria-label="Eraser" onChange={handleEraser}>
+                                <option></option>
+                                {selectedTems}
+                            </Form.Control>
+                        </FloatingLabel>
+                    </Col>
+                    <Col xs={12} md={4} className={"pl-0"}>
+                        <FloatingLabel controlId="floatingselect3" label="Select which tem has the eraser+">
+                            <Form.Control as="select" value={eraserPlus} aria-label="Eraser Plus" onChange={handleEraserPlus}>
+                                <option></option>
+                                {selectedTems}
+                            </Form.Control>
+                        </FloatingLabel>
+                    </Col>
+                </Row>
                 <FloatingLabel controlId="floatingselect4" label="Select which tem you have defeated">
                     <Form.Control as="select" value={defeatedTem} aria-label="Defeated Tem" onChange={handleDefeatedTem}>
                         {allTems}
