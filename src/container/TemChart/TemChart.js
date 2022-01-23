@@ -136,7 +136,7 @@ const TemChart = (props) => {
                             </Form.Control>
                         </FloatingLabel>
                     </Col>
-                    <Col xs={12} md={4} className={"px-0"}>
+                    <Col xs={12} md={4} className={"px-md-0"}>
                         <FloatingLabel controlId="floatingselect2" label="Select which tem has the eraser">
                             <Form.Control as="select" value={eraser} aria-label="Eraser" onChange={handleEraser}>
                                 <option></option>
