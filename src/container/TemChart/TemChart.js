@@ -115,9 +115,6 @@ const TemChart = (props) => {
   return (
     <Container>
         <Row>
-            {/* <Row className={"mx-auto pb-3"}>
-                <TemDropdowns data={props.data} selected={temList} return={(info, index) => setTem(info, index)}/>
-            </Row> */}
             <Row className={"pb-3"}>
                 {temData}
             </Row>

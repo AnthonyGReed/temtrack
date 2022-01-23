@@ -46,7 +46,18 @@ const TemData = forwardRef((props, ref) => {
         const newValue = Number(data.current) + Number(amount)
         if(newValue > 500) { data.setCurrent(500) }
         else if(newValue < 0) { data.setCurrent(0) }
-        else { data.setCurrent(Number(data.current) + Number(amount)) }
+        else if((Number(amount) + Number(totalCurrent)) > 1000) { 
+            console.log("amount: " + amount)
+            console.log("total current: " + totalCurrent)
+            console.log("newValue: " + newValue)
+            const val = Number(newValue) - ((Number(amount) + Number(totalCurrent)) - 1000)
+            data.setCurrent(val)
+            calculateCurrentTotal()
+        }
+        else {
+            data.setCurrent(newValue)
+            calculateCurrentTotal()
+        }
     }
 
     const inputCheckCurrent = (e, stat) => {
@@ -69,6 +80,17 @@ const TemData = forwardRef((props, ref) => {
         else if(((Number(total) - Number(current)) + Number(update) )> 1000) {return current}
         else {return update}
     }
+    
+    const calculateCurrentTotal = () => {
+        let total = 0
+        for(const stat in statData) {
+            const data = statData[stat]
+            if(data.name !== "Total") {
+               total += Number(data.current)
+            }
+        }
+        setTotalCurrent(total)
+    }
 
     useImperativeHandle(ref, () => {
         return {
@@ -90,7 +112,7 @@ const TemData = forwardRef((props, ref) => {
             statData[data].setTarget(0)
         }
     }
-    
+
     if(props.defeated.name !== undefined && props.defeated.name !== defeated.name) {
         setDefeated(props.defeated)
     }
