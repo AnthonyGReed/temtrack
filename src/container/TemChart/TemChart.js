@@ -100,7 +100,7 @@ const TemChart = (props) => {
     
     let temData = ""
     temData = refs.map((ref, index) => {
-        return (<Col key={index} xs={6} md={4} xl={2} className={"pb-3"} >
+        return (<Col key={index} xs={6} md={4} xl={2} className={"pb-3 px-1 px-md-3"} >
             <TemData index={index} defeated={defeatedTemObject} protiens={protiens} data={props.data} return={(info, index) => setTem(info, index)} ref={ref} />
         </Col>
         )

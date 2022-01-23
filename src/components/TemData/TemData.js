@@ -158,8 +158,8 @@ const TemData = forwardRef((props, ref) => {
     TVList = statData.map((stat, index) => {
         return ( 
             <Row key={index}>
-                <InputGroup className={"text-center"}>
-                    <InputGroup.Text className={stat.class}>{stat.short}</InputGroup.Text>
+                <InputGroup className={"text-center px-1 px-md-3"}>
+                    <InputGroup.Text className={""}>{stat.short}</InputGroup.Text>
                     <FormControl className={"px-0 text-center"} readOnly={stat.stat === "Total"} value={stat.current} onChange={(e) => inputCheckCurrent(e, stat)}/>
                     <FormControl className={"px-0 text-center"} readOnly={stat.stat === "Total"} value={stat.target} onChange={(e) => inputCheckTarget(e, stat)}/>
                     <FormControl className={"px-0 text-center"} readOnly value={stat.remaining}/>
@@ -168,7 +168,7 @@ const TemData = forwardRef((props, ref) => {
     )})
 
   return (
-    <Container key={props.index}>
+      <Container key={props.index} className={"px-1"}>
         <Row>
             <InputGroup>
                 <Form.Control as="select" value={tem.name} 
