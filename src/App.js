@@ -2,17 +2,16 @@ import './App.css';
 import TemChart from './container/TemChart/TemChart';
 import { useState, useEffect } from 'react'
 import Axios from 'axios'
-import { Container } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 
 function App() {
   const [temData, setTemData] = useState(null)
   useEffect(()=> {
-    if(temData == null) {
-      Axios.get("https://temtem-api.mael.tech/api/temtems?fields=name,tvYields,portraitWikiUrl,wikiPortraitUrlLarge,wikiUrl").then(response => {
-        setTemData(response.data)
+    Axios.get("https://temtem-api.mael.tech/api/temtems?fields=name,tvYields,portraitWikiUrl,wikiPortraitUrlLarge,wikiUrl").then(response => {
+      setTemData(response.data)
       })
-    }
-  })
+    document.title = "TemTracker"
+  }, [])
 
 
   return (
@@ -24,6 +23,15 @@ function App() {
       <Container className="pt-4">
         <TemChart data={temData}/>
       </Container>
+      {/* <footer className="footer">
+        <Container>
+          <Row>
+            <Col xs={12}>        
+              TemTem content copyright Crema - TemTracker Project by Anthony Reed - Available on <a href="githublink">Github</a>
+            </Col>
+          </Row>
+        </Container>
+      </footer> */}
     </div>
   );
 }
