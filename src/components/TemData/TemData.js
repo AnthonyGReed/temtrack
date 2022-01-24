@@ -38,7 +38,7 @@ const TemData = forwardRef((props, ref) => {
     statData.push({stat: "Attack", short: "atk", current: attackCurrent, target: attackTarget, remaining: attackRemaining, setCurrent: setAttackCurrent, setTarget: setAttackTarget, setRemaining: setAttackRemaining})
     statData.push({stat: "Defense", short: "def", current: defenseCurrent, target: defenseTarget, remaining: defenseRemaining, setCurrent: setDefenseCurrent, setTarget: setDefenseTarget, setRemaining: setDefenseRemaining})
     statData.push({stat: "Special Attack", short: "spatk", current: specialAttackCurrent, target: specialAttackTarget, remaining: specialAttackRemaining, setCurrent: setSpecialAttackCurrent, setTarget: setSpecialAttackTarget, setRemaining: setSpecialAttackRemaining})
-    statData.push({stat: "SpecialDefense", short: "spdef", current: specialDefenseCurrent, target: specialDefenseTarget, remaining: specialDefenseRemaining, setCurrent: setSpecialDefenseCurrent, setTarget: setSpecialDefenseTarget, setRemaining: setSpecialDefenseRemaining})
+    statData.push({stat: "Special Defense", short: "spdef", current: specialDefenseCurrent, target: specialDefenseTarget, remaining: specialDefenseRemaining, setCurrent: setSpecialDefenseCurrent, setTarget: setSpecialDefenseTarget, setRemaining: setSpecialDefenseRemaining})
     statData.push({stat: "Total", short: "total", current: totalCurrent, target: totalTarget, remaining: totalRemaining, setCurrent: setTotalCurrent, setTarget: setTotalTarget, setRemaining: setTotalRemaining})
     
     const addTVs = (stat, amount) => {

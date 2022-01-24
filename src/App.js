@@ -7,8 +7,8 @@ import { Container, Row, Col } from 'react-bootstrap'
 function App() {
   const [temData, setTemData] = useState(null)
   useEffect(()=> {
-    Axios.get("https://temtem-api.mael.tech/api/temtems?fields=name,tvYields,portraitWikiUrl,wikiPortraitUrlLarge,wikiUrl").then(response => {
-      setTemData(response.data)
+    Axios.get("https://temtem-api.mael.tech/api/temtems?fields=name,tvYields,wikiUrl").then(response => {
+      setTemData(response.data.sort((a,b) => (a.name > b.name) ? 1 : -1))
       })
     document.title = "TemTracker"
   }, [])
@@ -23,15 +23,9 @@ function App() {
       <Container className="pt-4">
         <TemChart data={temData}/>
       </Container>
-      {/* <footer className="footer">
-        <Container>
-          <Row>
-            <Col xs={12}>        
-              TemTem content copyright Crema - TemTracker Project by Anthony Reed - Available on <a href="githublink">Github</a>
-            </Col>
-          </Row>
-        </Container>
-      </footer> */}
+      <footer className={"text-center"}> 
+        TemTem content copyright Crema - TemTracker Project by Anthony Reed - Available on <a href="https://github.com/AnthonyGReed/temtrack">Github</a>
+      </footer>
     </div>
   );
 }
